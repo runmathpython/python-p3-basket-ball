@@ -1,4 +1,13 @@
 def game_dict():
+
+    #returns a dictionary that has two items, one uses "home" as the key
+    # and the other uses "away" as the key. So two teams, a home team and an away team
+    # each key value is a dictionary that shows the specs of each team's.
+    # the dictionary used as the key value has three items, one is for a team name,
+    # another is for team colors, and the other is for players.
+    # and the key value of the key "players" is a list of dictionaries,
+    # each of which shows the stats of each player's.
+
     return {
         "home": {
             "team_name": "Cleveland Cavaliers",
@@ -182,3 +191,128 @@ def game_dict():
             ]
         }
     }
+
+def get_all_players():
+
+    # make a dictionary for all the players.
+    # so make a dictionary, where each item uses a player's name as a key and the key value is a dictionary
+    # that shows the stats of the player's as the name, the number, the position, etc.
+
+    all_players = {}
+
+    # there are two teams, one is a home team, and the other is an away team.
+    # and of course, each team has a group of players.
+
+    for team in ["home", "away"]:
+        for player in game_dict()[team]["players"]:
+
+            # update() method inserts a specific item to a dictionary.
+            # in this case, each key is a player's name, and the key value is a dictionary
+            # which has items that show the stats of the player's as the name, the number, the position, etc.
+            # so each item is put the way as follows
+            # name: the name, number: the number, position: the position, etc.
+
+            all_players.update(
+                {player["name"]: {
+                    "name": player["name"],
+                    "number": player["number"],
+                    "position": player["position"],
+                    "points_per_game": player["points_per_game"],
+                    "rebounds_per_game": player["rebounds_per_game"],
+                    "assists_per_game": player["assists_per_game"],
+                    "steals_per_game": player["steals_per_game"],
+                    "blocks_per_game": player["blocks_per_game"],
+                    "career_points": player["career_points"],
+                    "age": player["age"],
+                    "height_inches": player["height_inches"],
+                    "shoe_brand": player["shoe_brand"]
+                }}
+            )
+    
+    # see if this function works as intended
+    #for player in all_players:
+        #print(all_players[player]["name"], ": ", all_players[player]["points_per_game"])
+    
+
+    return all_players
+
+def num_points_per_game(player_name):
+
+    # get the stats for every player and return the points per game for the player with the name
+    return(get_all_players()[player_name]["points_per_game"])
+
+def player_age(player_name):
+
+    #get the stats for all the players and return the age of the player with the name
+    return get_all_players()[player_name]["age"]
+
+def team_colors(team_name):
+
+    # make the dictionary for the two teams and return the team colors of the team's
+    for team in game_dict():
+        if game_dict()[team]["team_name"] == team_name:
+            return game_dict()[team]["colors"]
+
+def team_names():
+
+    # make the dictionary for the two teams and return the array of team names
+    team_names = []
+    for team in game_dict():
+        team_names.append(game_dict()[team]["team_name"])
+    return team_names
+
+def player_numbers(team_name):
+
+    # make the dictionary for the two teams, and return the list of player numbers
+    # that the players of the team with the team name have
+
+    player_numbers = []
+    for team in game_dict():
+        if game_dict()[team]["team_name"] == team_name:
+            team_players = game_dict()[team]["players"]
+            for player in team_players:
+                player_numbers.append(player["number"])
+    
+    return player_numbers
+
+def player_stats(player_name):
+
+    # get all the players and return the stats of the player with the player name
+
+    return(get_all_players()[player_name])
+
+def average_rebounds_by_shoe_brand():
+
+    # make a dictioinary for shoe brands that the players wear
+    shoe_brand_dict = {}
+
+    # make a dictionary for all the players that shows the stats for each player.
+    # for each item in the dictionary, the key is the player's name
+    # and the key value is a dictionary that shows the stats for the player
+    players = get_all_players()
+    
+    for player in players:
+        brand = players[player]["shoe_brand"]
+        rebounds = players[player]["rebounds_per_game"]
+
+        # if the brand exists in the shoe barnd dict, add the rebounds per game for the player
+        # to the list of rebounds per game
+        if (brand in shoe_brand_dict):
+            shoe_brand_dict[brand].append(rebounds)
+            #print("add to list: ", shoe_brand_dict)
+        else:
+            # if the brand does not exist, add an item to the dictionary
+            shoe_brand_dict[brand] = [rebounds]
+            #print("add to dict: ", shoe_brand_dict)
+    for brand in shoe_brand_dict:
+        average = sum(shoe_brand_dict[brand]) / len(shoe_brand_dict[brand])
+        print(f'{brand}: ', "{0:.2f}".format(average))
+
+
+
+# test some functions to see if they work as intended
+
+#for player in get_all_players():
+    #print(get_all_players()[player]["name"], ": ", get_all_players()[player]["points_per_game"])
+
+#average_rebounds_by_shoe_brand()
